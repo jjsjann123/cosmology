@@ -1,0 +1,45 @@
+/*!
+
+\page proposal Project Proposal
+
+\author		Jie Jiang
+\date		March 19, 2015
+
+\section intro Introduction
+
+### Cosmology Application
+
+Cosmological simulations are vital of understanding the Universe's development over a 13.7 billion year's time and how the galaxies and clusters of galaxies surrounding us evolves. The mass-energy of the known universe is composed of 4.9% ordinary matter (Atoms), 26.8% <a href="http://en.wikipedia.org/wiki/Dark_matter">dark matter</a> and 68.3% <a href="http://en.wikipedia.org/wiki/Dark_energy">dark energy</a>. Because dark energy plus dark matter constitute 95.1% of the total mass-energy content of the universe. A theorist's universe has dark matter only, according to Katrin Heitmann from Los Alamos National Laboratory.
+
+<a href="http://darksky.slac.stanford.edu/">Dark Sky Simulations</a> are an ongoing series of cosmological N-body simulations designed to provide quantitative model of the large-scale simulation data, as well as analysis tools, to the public. 
+
+For SciVis2015 contest, dataset from the ds14 Simulations have been used.
+
+> ds14_a is the first trillion particle simulation released to the public, and is being used to study the very largest scales in the Universe. It spans a cubical region 8 Gpc/h on a side, nearly 40 billion light years across. With 102403 (~1.07 trillion) particles, we follow the growth of the largest clusters of galaxies, weighing in at more than a quadrillion times the mass of our own sun.
+> This simulation, as well as a set of lower-particle count simulations (20483-40963), are referred to as the ds14_g simulations, and are the first in a set of simulations enabled through DOE INCITE computing grant project titled Probing Dark Matter at Extreme Scales. of 80 million CPU hours on the Oak Ridge National Laboratory Titan Supercomputer. 
+
+### Task
+
+There are multiple tasks are required in the visualization by the contest. In this project, we'll focus on one thing:
+
+- Initial data integration and browsing
+
+### Scope
+
+This scope of this project includes:
+
+- Parallel data read
+- Capabilities for navigation and interaction
+- Particle data rendering with progressive data access
+
+\section data Data
+
+\section tasks Task(s)
+
+\section software Software
+
+\section Visualization Design
+
+\section Expected Results and Evaluation
+
+ */
