@@ -185,7 +185,8 @@ void WaveletAnalysis::initOffsetsAndLens(unsigned int level){
 }
 
 void WaveletAnalysis::initOutput(void *par){
-	int val = (int)par;
+	//int val = (int)par;
+	int val = ((int*)par)[0];
 	unsigned int offset = getOffset();
 	(*outputvalues)[offset] = val;
 }
