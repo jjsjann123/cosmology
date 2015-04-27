@@ -19,8 +19,9 @@ using namespace AJParallelRendering;
 using namespace std;
 
 
-RenderManager::RenderManager() 
+RenderManager::RenderManager()
 {
+	setEmissionOff();
 	_volume = NULL;
 }
 
@@ -77,6 +78,10 @@ void RenderManager::updateCamera(int level, Ray ray, Vec3f cameraUpDir)
 void RenderManager::render()
 {
 	//_volume->test();	// print debug information
+	if (_emissionMode )
+		_renderer.setEmissionOn();
+	else
+		_renderer.setEmissionOff();
 	_renderer.render();
 }
 
@@ -97,8 +102,27 @@ void RenderManager::saveImage(int myrank, int level, const char *ptr)
 
 void RenderManager::initiateTransferFunction()
 {
-	/*
 
+	if ( _emissionMode )
+	{
+		_renderer.addTransferFunction(0, 0, 0, 0, 0);
+		_renderer.addTransferFunction(0.5, 0, 0.2, 0.2, 0.0);
+		_renderer.addTransferFunction(1, 0.05, 0.12, 0.02, 0.2);
+		_renderer.addTransferFunction(2, 0.3, 0.2, 0.5, 0.2);
+		_renderer.addTransferFunction(20, 0.7, 0, 0.6, 0.3);
+		_renderer.addTransferFunction(100, 1, 0.0, 0.0, 1);
+		_renderer.addTransferFunction(1000, 0.6, 0.2, 0.1, 0.3);
+		_renderer.addTransferFunction(10000, 1, 1, 1, 1);
+	} else {
+		_renderer.addTransferFunction(0, 0, 0, 0, 0);
+		_renderer.addTransferFunction(0.5, 0, 0.2, 0.2, 0.0);
+		_renderer.addTransferFunction(1, 0.5, 0.2, 0.2, 0.04);
+		_renderer.addTransferFunction(100, 1, 0.6, 0.6, 0.06);
+		_renderer.addTransferFunction(1000, 0.6, 0.2, 0.1, 0.3);
+		_renderer.addTransferFunction(10000, 1, 1, 1, 1);
+	}
+
+/*
 	_renderer.addTransferFunction(0, 0, 0, 0, 0.0);
 	_renderer.addTransferFunction(0.01, 0, 1, 0, 0.0);
 	_renderer.addTransferFunction(0.02, 0.5, 0.4, 0, 0.3);
@@ -107,24 +131,8 @@ void RenderManager::initiateTransferFunction()
 	_renderer.addTransferFunction(0.5, 1, 0.5, 0.5, 0.3);
 	_renderer.addTransferFunction(0.7, 1, 1, 1, 0.5);
 	_renderer.addTransferFunction(1, 1, 1, 1, 1);
-	*/
+*/
 
-	_renderer.addTransferFunction(0, 0, 0, 0, 0);
-	_renderer.addTransferFunction(0.50, 0, 0.2, 0.2, 0.0);
-	_renderer.addTransferFunction(1, 0, 0.2, 0.2, 0.02);
-	_renderer.addTransferFunction(100, 0, 0.6, 0.6, 0.06);
-	_renderer.addTransferFunction(1000, 0.6, 0.2, 0.1, 0.3);
-	_renderer.addTransferFunction(10000, 1, 1, 1, 1);
-
-	/*
-	_renderer.addTransferFunction(0, 0, 0, 0, 0);
-	_renderer.addTransferFunction(1, 1, 1, 1, 1);
-	_renderer.addTransferFunction(1000, 0, 0, 1, 0.0);
-	_renderer.addTransferFunction(1200, 1, 1, 1, 0.5);
-	_renderer.addTransferFunction(1300, 1, 1, 1, 0.2);
-
-	_renderer.addTransferFunction(10000, 1, 0, 0, 0.0);
-	 */
 }
 
 ImageIO* RenderManager::getImage()

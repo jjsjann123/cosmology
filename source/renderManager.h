@@ -35,9 +35,14 @@ namespace AJParallelRendering {
 		ImageIO* getImage();
 		void test(int n);
 
+		void setEmissionOn() {_emissionMode = true;};
+		void setEmissionOff() {_emissionMode = false;};
+
 	protected:
 		LODVolume* _volume;
 		Renderer _renderer;
+
+		bool _emissionMode;
 
 	private:
 
@@ -46,3 +51,4 @@ namespace AJParallelRendering {
 };
 
 #endif //__RENDERMANAGER_H
+

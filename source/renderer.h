@@ -52,6 +52,9 @@ namespace AJParallelRendering {
 
 		ImageIO* getImage();
 
+		void setEmissionOn() {_emissionMode = true;};
+		void setEmissionOff() {_emissionMode = false;};
+
 	//protected:
 		LODVolume *_volumeData;
 		float _globalMin;
@@ -73,6 +76,7 @@ namespace AJParallelRendering {
 		float _stepSize;
 		float _pixelWidth;
 		float _pixelHeight;
+		bool _emissionMode;
 
 		int _level;
 

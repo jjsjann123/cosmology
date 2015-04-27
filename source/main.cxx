@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 		myRenderManager.setRenderingParameter(256, 256, 500.0, 500.0, 20.0, 50000.0, 500.0);
 		//myRenderManager.setRenderingParameter(11, 11, 10.0, 10.0, 20.0, 6000.0, 30.0);
 		//cameraUp.setValue(1, 0, 0);
-		int level = 1;
+		int level = 0;
 
 		CompositeManager myCompositeManager;
 		myCompositeManager.setImage( myRenderManager.getImage() );
@@ -170,20 +170,25 @@ int main(int argc, char** argv)
 
 			RenderManager myRenderManager;
 			myRenderManager.getVolumeInput( myDataManager.getVolumeOutput() );
+
+			myRenderManager.setEmissionOff();
+
 			myRenderManager.initiateTransferFunction();
 			myRenderManager.setRenderingParameter(256, 256, 670.0, 670.0, 20.0, 100000.0, 670.0);
 			//myRenderManager.setRenderingParameter(11, 11, 10.0, 10.0, 20.0, 6000.0, 30.0);
 
 			//if (myrank == 1) {
 			Ray testRay;
-			//testRay.origin.setValue(-5000, -50000, -50000);
+			//testRay.origin.setValue(-3000, -50000, -50000);
 			testRay.origin.setValue(0, 0, -50000);
+			//testRay.origin.setValue(0, 0, 0);
 			//testRay.dir.setValue(0.7, 0.7, 0.7);
-			testRay.dir.setValue(0, 0, 1);
+			testRay.dir.setValue(0, 0, 0.7);
+			//testRay.dir.setValue(0.6, 1, 1);
 			Vec3f cameraUp;
-			cameraUp.setValue(0, 1, 0);
+			cameraUp.setValue(1, 0, 0);
 			//cameraUp.setValue(1, 0, 0);
-			int level = 1;
+			int level = 0;
 			myRenderManager.updateCamera(level, testRay, cameraUp);
 			myRenderManager.render();
 			myRenderManager.saveImage(myrank, level, "arbitraryRay");

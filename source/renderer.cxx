@@ -232,13 +232,6 @@ void Renderer::render()
 		break;
 	case ARBITRARY:
 	{
-		float Le = .25f;           // Emission coefficient
-		float sigma_a = 10;        // Absorption coefficient
-		float sigma_s = 10;        // Scattering coefficient
-		float stepDist = 0.025f;   // Ray step amount
-		float lightIntensity = 40; // Light source intensity
-	    float tau = 0.f;  // accumulated beam transmittance
-	    float L = 0;      // radiance along the ray
 
 		Ray ray = _ray; // new ray
 		Vec3f origin = _ray.origin;
@@ -286,6 +279,22 @@ bool Renderer::rayMarching (Ray ray, int imageX, int imageY)
 		int end = floor(t1 / _stepSize);
 
 
+		float Le = .15f;           // Emission coefficient
+		float sigma_a = 10;        // Absorption coefficient
+		float sigma_s = 10;        // Scattering coefficient
+
+		float x = _volumeData->_volumeOffset[0];
+		float y = _volumeData->_volumeOffset[1];
+		float z = _volumeData->_volumeOffset[2];
+		float diagonalLength = sqrt(x*x+y*y+z*z);
+
+		float stepSize = _stepSize / diagonalLength;
+		//printf ( "##############stepSize: %.5f", stepSize);
+
+		float tau = 0.f;  // accumulated beam transmittance
+	    float L = 0;      // radiance along the ray
+
+
 		for ( int i = start; i < end; i++ )	{
 			//printf("\nray: %.5g, %.5g, %.5g\ndir:%.5g, %.5g, %.5g \n range: %.5g, %.5g\n", ray.origin._x, ray.origin._y, ray.origin._z, ray.dir._x, ray.dir._y, ray.dir._z, t0, t1);
 			pos = ray.origin + ray.dir * i * _stepSize;
@@ -295,15 +304,30 @@ bool Renderer::rayMarching (Ray ray, int imageX, int imageY)
 				printf ("level: %d pos: %.5g, %.5g, %.5g data value: %.5g\n", _level, pos[0], pos[1], pos[2], val);
 				continue;
 			}
+
 			//float val = 0.5;
 			float rgba[5];
 			float rgbaX[4];
 			_image.getRGBA ( imageX, imageY, rgba);
 			_transferFn.getValue(val, rgbaX);
-			rgba[0] = rgba[0] + rgbaX[0] * rgbaX[3] * ( 1- rgba[3]);
-			rgba[1] = rgba[1] + rgbaX[1] * rgbaX[3] * ( 1- rgba[3]);
-			rgba[2] = rgba[2] + rgbaX[2] * rgbaX[3] * ( 1- rgba[3]);
-			rgba[3] = rgba[3] + rgbaX[3] * ( 1 - rgba[3]);
+
+			if ( _emissionMode) {
+				float atten = expf(-rgba[3]);
+				if (atten < 0.005f) {
+					break;
+				}
+				float factor = atten * stepSize * sigma_s * Le;
+				rgba[0] += rgbaX[0] * factor;
+				rgba[1] += rgbaX[1] * factor;
+				rgba[2] += rgbaX[2] * factor;
+				//rgba[3] = rgba[3] + rgbaX[3] * ( 1 - rgba[3]);
+				rgba[3] += rgbaX[3] * (sigma_s + sigma_a) * stepSize;
+			} else {
+				rgba[0] = rgba[0] + rgbaX[0] * rgbaX[3] * ( 1- rgba[3]);
+				rgba[1] = rgba[1] + rgbaX[1] * rgbaX[3] * ( 1- rgba[3]);
+				rgba[2] = rgba[2] + rgbaX[2] * rgbaX[3] * ( 1- rgba[3]);
+				rgba[3] = rgba[3] + rgbaX[3] * ( 1 - rgba[3]);
+			}
 			rgba[4] = i * _stepSize;
 			_image.setRGBA( imageX, imageY, rgba);
 			if (rgba[3] > 0.97)

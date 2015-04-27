@@ -118,7 +118,8 @@ void Compositor::compositeArray( bool send, int commID, int offset, int length)
 					data[i*5] = data[i*5] + _tempBuffer[i*5] * ( 1- data[i*5+3]);
 					data[i*5+1] = data[i*5+1] + _tempBuffer[i*5+1] * ( 1- data[i*5+3]);
 					data[i*5+2] = data[i*5+2] + _tempBuffer[i*5+2] * ( 1- data[i*5+3]);
-					data[i*5+3] = data[i*5+3] + _tempBuffer[i*5+3] * ( 1 - data[i*5+3]);
+					//data[i*5+3] = data[i*5+3] + _tempBuffer[i*5+3] * ( 1 - data[i*5+3]);
+					//data[i*5+3] = data[i*5+3] + data[i*5+3];
 					data[i*5+4] = _tempBuffer[i*5+4];
 				} else {
 					memcpy ( data+i*5, _tempBuffer+i*5, 4*sizeof(float));
@@ -133,7 +134,8 @@ void Compositor::compositeArray( bool send, int commID, int offset, int length)
 				data[i*5] = _tempBuffer[i*5] + data[i*5] * ( 1- _tempBuffer[i*5+3]);
 				data[i*5+1] = _tempBuffer[i*5+1] + data[i*5+1] * ( 1- _tempBuffer[i*5+3]);
 				data[i*5+2] = _tempBuffer[i*5+2] + data[i*5+2] * ( 1- _tempBuffer[i*5+3]);
-				data[i*5+3] = _tempBuffer[i*5+3] + data[i*5+3] * ( 1 - _tempBuffer[i*5+3]);
+				//data[i*5+3] = _tempBuffer[i*5+3] + data[i*5+3] * ( 1 - _tempBuffer[i*5+3]);
+				//data[i*5+3] = _tempBuffer[i*5+3] + data[i*5+3];
 			}
 		}
 	}
