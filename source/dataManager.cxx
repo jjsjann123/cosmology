@@ -188,6 +188,31 @@ void DataManager::particle2Volume(int levels, Vec3i grid)
 	} while ( _reader.load() != 0 );
 }
 
+void DataManager::particle2Volume(int levels, Vec3i grid, float ratio)
+{
+	_gridSize = grid;
+	_volume = new LODVolume(levels, grid[0], grid[1], grid[2]);
+
+	_volumeSpacing = _volumeSpan - _volumeOrigin;
+	_volumeSpacing[0] /= (grid[0]-1);
+	_volumeSpacing[1] /= (grid[1]-1);
+	_volumeSpacing[2] /= (grid[2]-1);
+	_volume->_volumeSpacing = _volumeSpacing;
+	_volume->_volumeOffset = _volumeOrigin; // Yes it looks weird.
+	float pos[3];
+	_reader.load(0, BUFFER_SIZE);
+	do {
+		for (int i = 0; i < BUFFER_SIZE; i++) {
+			_reader.getData3f(i, pos);
+			for ( int j = 0; j < 3; j++) {
+				pos[j] = ( pos[j] - _volumeOrigin[j] ) / _volumeSpacing[j];
+			}
+			//cout << "reading data " << endl;
+			_volume->addVolume(pos, ratio);
+		}
+	} while ( _reader.load() != 0 );
+}
+
 void DataManager::accumulateGlobalVolume(int d, int offset, int id)
 {
 	int flag = id - offset; // this will be the id for each node while compositing

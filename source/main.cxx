@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 	if ( argc != 23 )
 	{
 		cout << "usage ..." << endl;
-		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName] [ifuseemission] [imageResolution]" << endl;
+		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName] [ifuseemission] [imageResolution] [dataRatio]" << endl;
 		MPI_Finalize();
 		return -1;
 	}
@@ -77,6 +77,7 @@ int main(int argc, char** argv)
 	int level = atoi(argv[19]);
 	int emission = atoi(argv[21]);
 	float imgResolution = atoi(argv[22]);
+	float dataRatio = atof(argv[23]);
 
 	int d = 0;
 	for ( int i = 0; pow(2, i) <= npes - 1; i++)
@@ -192,7 +193,8 @@ int main(int argc, char** argv)
 			//volumeGrid.setValue(512, 512, 512);
 			//volumeGrid.setValue(128, 128, 128);
 			volumeGrid.setValue(gridX, gridY, gridZ);
-			myDataManager.particle2Volume(3, volumeGrid);
+			//myDataManager.particle2Volume(3, volumeGrid);
+			myDataManager.particle2Volume(3, volumeGrid, dataRatio);
 //myDataManager.testPrintVolume(myrank);
 			//myDataManager.accumulateGlobalVolume(d, 1, myrank);
 //myDataManager.testPrintVolume(myrank);

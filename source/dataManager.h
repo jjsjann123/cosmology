@@ -39,6 +39,7 @@ namespace AJParallelRendering {
 		float syncGlobalBoundary(int d, int offset, int id);	/// returns the maximum span
 
 		void particle2Volume(int levels, Vec3i grid);
+		void particle2Volume(int levels, Vec3i grid, float ratio);
 		void accumulateGlobalVolume(int d, int offset, int id);
 		void normalizeVolume();
 		void shrinkToLocalVolume(int d, int offset, int id);
