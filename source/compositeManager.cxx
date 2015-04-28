@@ -32,7 +32,7 @@ void CompositeManager::saveImage(int myrank, int level, const char *ptr)
 		convert << string("_level_");
 		convert << level;
 	} else {
-		convert << string(ptr) << "_output";
+		convert << string(ptr) << "_output_level_" << level;
 	}
 	q = convert.str();
 	q.append(".bmp");
