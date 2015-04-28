@@ -1,0 +1,21 @@
+#!/bin/bash
+
+pi=`echo "4*a(1)" | bc -l`
+for i in `seq 61 5 360`
+do
+	rad=`echo "$i*($pi/180)" | bc -l`
+	x=`echo "s($rad)*60000" | bc -l`
+	x=`echo "$x/1" | bc`
+	y=`echo "c($rad)*60000" | bc -l`
+	y=`echo "$y/1" | bc`
+	dirx=`echo "s($rad)*(-1)" | bc -l`
+	diry=`echo "c($rad)*(-1)" | bc -l`
+	aprun -n 9 ./demo ../data/ test 256 256 256 512 512 $x 10000 $y $dirx -0.18 $diry 0 1 0 20 120000 0 rotate_$i 0 0.4 1
+done
+
+#aprun -n 9 ./demo ../data/ test 64 64 64 512 512 0 0 -60000 0 0 1 0 1 0 20 120000 0 large512_64 0 4 0.015625
+#aprun -n 9 ./demo ../data/ test 128 128 128 512 512 0 0 -60000 0 0 1 0 1 0 20 120000 0 large512_128 0 2 0.125
+#aprun -n 9 ./demo ../data/ test 256 256 256 512 512 0 0 -60000 0 0 1 0 1 0 20 120000 0 large512_e 1 1 1
+#aprun -n 9 ./demo ../data/ test 256 256 256 512 512 0 0 -60000 0 0 1 0 1 0 20 120000 2 large512 0 1 1 1
+#aprun -n 9 ./demo ../data/ test 256 256 256 512 512 0 0 -60000 0 0 1 0 1 0 20 120000 1 large512 0 1 1 1
+#aprun -n 9 ./demo ../data/ test 256 256 256 512 512 0 0 -60000 0 0 1 0 1 0 20 120000 0 large512 0 1 1 1

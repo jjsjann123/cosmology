@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	fileDir = argv[1];
 	filePattern = argv[2];
 
-	if ( argc != 23 )
+	if ( argc != 24 )
 	{
 		cout << "usage ..." << endl;
 		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName] [ifuseemission] [imageResolution] [dataRatio]" << endl;
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	float farPlane = atof(argv[18]);
 	int level = atoi(argv[19]);
 	int emission = atoi(argv[21]);
-	float imgResolution = atoi(argv[22]);
+	float imgResolution = atof(argv[22]);
 	float dataRatio = atof(argv[23]);
 
 	int d = 0;
@@ -229,12 +229,13 @@ int main(int argc, char** argv)
 			myRenderManager.render();
 
 			string q(argv[20]);
-			myRenderManager.saveImage(myrank, level, q.c_str());
+			//myRenderManager.saveImage(myrank, level, q.c_str());
 			q.append("_comp");
 			CompositeManager myCompositeManager;
 			myCompositeManager.setImage( myRenderManager.getImage() );
 			myCompositeManager.composite(myrank, d);
-			myCompositeManager.saveImage(myrank, level, q.c_str());
+			//myCompositeManager.saveImage(myrank, level, q.c_str());
+
 			//}
 			//myRenderManager.test(myrank);
 
