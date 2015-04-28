@@ -51,10 +51,10 @@ int main(int argc, char** argv)
 	fileDir = argv[1];
 	filePattern = argv[2];
 
-	if ( argc != 21 )
+	if ( argc != 22 )
 	{
 		cout << "usage ..." << endl;
-		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName]" << endl;
+		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName] [ifuseemission]" << endl;
 		MPI_Finalize();
 		return -1;
 	}
@@ -76,6 +76,7 @@ int main(int argc, char** argv)
 	float nearPlane = atof(argv[17]);
 	float farPlane = atof(argv[18]);
 	int level = atoi(argv[19]);
+	int emission = atoi(argv[20]);
 
 	int d = 0;
 	for ( int i = 0; pow(2, i) <= npes - 1; i++)
@@ -182,7 +183,7 @@ int main(int argc, char** argv)
 
 			float step = max(gridX, gridY);
 			step = step > gridZ ? step : gridZ;
-			step = minDim / step;
+			step = minDim / step / 2;
 
 			MPI_Barrier(MPI_COMM_WORLD);	// barrier_2;
 
@@ -201,7 +202,10 @@ int main(int argc, char** argv)
 			RenderManager myRenderManager;
 			myRenderManager.getVolumeInput( myDataManager.getVolumeOutput() );
 
-			myRenderManager.setEmissionOff();
+			if ( emission == 0)
+				myRenderManager.setEmissionOff();
+			else
+				myRenderManager.setEmissionOn();
 
 			myRenderManager.initiateTransferFunction();
 			myRenderManager.setRenderingParameter(imgWidth, imgHeight, step, step, nearPlane, farPlane, step);
