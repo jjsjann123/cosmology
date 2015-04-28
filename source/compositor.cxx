@@ -93,11 +93,11 @@ void Compositor::compositeArray( bool send, int commID, int offset, int length)
 			{
 				if ( _tempBuffer[i*5+4] > data[i*5+4] )
 				{
-					beneath = true;
-					//beneath = false;
-				} else {
-					beneath = false;
 					//beneath = true;
+					beneath = false;
+				} else {
+					//beneath = false;
+					beneath = true;
 				}
 //			} else {
 //				if ( _tempBuffer[i*5+4] > data[i*5+4] )
