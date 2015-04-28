@@ -1,5 +1,4 @@
-/*!
- *
+/*
  *	CS 595 Assignment 10
  *	Jie Jiang
  *	
@@ -51,10 +50,10 @@ int main(int argc, char** argv)
 	fileDir = argv[1];
 	filePattern = argv[2];
 
-	if ( argc != 22 )
+	if ( argc != 23 )
 	{
 		cout << "usage ..." << endl;
-		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName] [ifuseemission]" << endl;
+		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName] [ifuseemission] [imageResolution]" << endl;
 		MPI_Finalize();
 		return -1;
 	}
@@ -76,7 +75,8 @@ int main(int argc, char** argv)
 	float nearPlane = atof(argv[17]);
 	float farPlane = atof(argv[18]);
 	int level = atoi(argv[19]);
-	int emission = atoi(argv[20]);
+	int emission = atoi(argv[21]);
+	float imgResolution = atoi(argv[22]);
 
 	int d = 0;
 	for ( int i = 0; pow(2, i) <= npes - 1; i++)
@@ -184,6 +184,7 @@ int main(int argc, char** argv)
 			float step = max(gridX, gridY);
 			step = step > gridZ ? step : gridZ;
 			step = minDim / step / 2;
+			float pixelSize = step / imgResolution;
 
 			MPI_Barrier(MPI_COMM_WORLD);	// barrier_2;
 
@@ -208,7 +209,7 @@ int main(int argc, char** argv)
 				myRenderManager.setEmissionOn();
 
 			myRenderManager.initiateTransferFunction();
-			myRenderManager.setRenderingParameter(imgWidth, imgHeight, step, step, nearPlane, farPlane, step);
+			myRenderManager.setRenderingParameter(imgWidth, imgHeight, pixelSize, pixelSize, nearPlane, farPlane, step);
 			//myRenderManager.setRenderingParameter(11, 11, 10.0, 10.0, 20.0, 6000.0, 30.0);
 
 			//if (myrank == 1) {
