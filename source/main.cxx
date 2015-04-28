@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	float farPlane = atof(argv[18]);
 	int level = atoi(argv[19]);
 	int emission = atoi(argv[21]);
-	float imgResolution = atoi(argv[22]);
+	float imgResolution = atof(argv[22]);
 	float dataRatio = atof(argv[23]);
 
 	int d = 0;
