@@ -24,12 +24,17 @@ using namespace std;
 void CompositeManager::saveImage(int myrank, int level, const char *ptr)
 {
 	ostringstream convert;
-	convert << level;
-	convert << string("_level_");
-	convert << myrank;
-	convert << string("_");
-	convert << string(ptr);
-	string q = convert.str();
+	string q;
+	if ( myrank != 0 ) {
+		convert << string(ptr);
+		convert << string("_node_");
+		convert << myrank;
+		convert << string("_level_");
+		convert << level;
+	} else {
+		convert << string(ptr) << "_output";
+	}
+	q = convert.str();
 	q.append(".bmp");
 
 	_compositor.saveImage(q.c_str());

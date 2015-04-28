@@ -82,7 +82,7 @@ void DataManager::findLocalBoundary()
 	_volumeSpan.setValue(globalMinMax3[1], globalMinMax3[3], globalMinMax3[5]);
 }
 
-void DataManager::syncGlobalBoundary(int d, int offset, int id)
+float DataManager::syncGlobalBoundary(int d, int offset, int id)
 {
 	int flag = id - offset; // this will be the id for each node while compositing
 
@@ -146,6 +146,12 @@ void DataManager::syncGlobalBoundary(int d, int offset, int id)
 			}
 		}
 	}
+
+	float minDim = minMax[1] - minMax[0];
+	for ( int i = 1; i < 3; i++) {
+		minDim = min(minDim, minMax[2*i+1] - minMax[2*i]);
+	}
+	return minDim;
 }
 
 void DataManager::testPrintVolume(int id)

@@ -51,6 +51,32 @@ int main(int argc, char** argv)
 	fileDir = argv[1];
 	filePattern = argv[2];
 
+	if ( argc != 21 )
+	{
+		cout << "usage ..." << endl;
+		cout << "./demo [data_dir] [data_file_pattern] [gridX] [gridY] [gridZ] [imageWidth] [imageHeight] [cameraX] [cameraY] [cameraZ] [cameraDirX] [cameraDirY] [cameraDirZ] [cameraUpDirX] [cameraUpDirY] [cameraUpDirZ] [nearPlane] [farPlane] [level] [imageName]" << endl;
+		MPI_Finalize();
+		return -1;
+	}
+
+	int gridX = atoi(argv[3]);
+	int gridY = atoi(argv[4]);
+	int gridZ = atoi(argv[5]);
+	int imgWidth = atoi(argv[6]);
+	int imgHeight = atoi(argv[7]);
+	float cameraPosX = atof(argv[8]);
+	float cameraPosY = atof(argv[9]);
+	float cameraPosZ = atof(argv[10]);
+	float cameraDirX = atof(argv[11]);
+	float cameraDirY = atof(argv[12]);
+	float cameraDirZ = atof(argv[13]);
+	float cameraUpDirX = atof(argv[14]);
+	float cameraUpDirY = atof(argv[15]);
+	float cameraUpDirZ = atof(argv[16]);
+	float nearPlane = atof(argv[17]);
+	float farPlane = atof(argv[18]);
+	int level = atoi(argv[19]);
+
 	int d = 0;
 	for ( int i = 0; pow(2, i) <= npes - 1; i++)
 	{
@@ -130,15 +156,14 @@ int main(int argc, char** argv)
 
 
 		RenderManager myRenderManager;
-		myRenderManager.setRenderingParameter(256, 256, 500.0, 500.0, 20.0, 50000.0, 500.0);
+		myRenderManager.setRenderingParameter(imgWidth, imgHeight, 500.0, 500.0, 20.0, 50000.0, 500.0);
 		//myRenderManager.setRenderingParameter(11, 11, 10.0, 10.0, 20.0, 6000.0, 30.0);
 		//cameraUp.setValue(1, 0, 0);
-		int level = 0;
 
 		CompositeManager myCompositeManager;
 		myCompositeManager.setImage( myRenderManager.getImage() );
 		myCompositeManager.composite(myrank, d);
-		myCompositeManager.saveImage(myrank, level, "arbitraryRay_final_output");
+		myCompositeManager.saveImage(myrank, level, argv[20]);
 		MPI_Barrier(MPI_COMM_WORLD);	// barrier_3;
 	} else {
 		DataManager myDataManager;
@@ -153,13 +178,18 @@ int main(int argc, char** argv)
 			myDataManager.findLocalBoundary();
 			//myDataManager.testPrintVolume(myrank);
 			MPI_Barrier(MPI_COMM_WORLD);	// barrier_1;
-			myDataManager.syncGlobalBoundary(d, 1, myrank);
+			float minDim = myDataManager.syncGlobalBoundary(d, 1, myrank);
+
+			float step = max(gridX, gridY);
+			step = step > gridZ ? step : gridZ;
+			step = minDim / step;
+
 			MPI_Barrier(MPI_COMM_WORLD);	// barrier_2;
 
 			Vec3i volumeGrid;
 			//volumeGrid.setValue(512, 512, 512);
 			//volumeGrid.setValue(128, 128, 128);
-			volumeGrid.setValue(256, 256, 256);
+			volumeGrid.setValue(gridX, gridY, gridZ);
 			myDataManager.particle2Volume(3, volumeGrid);
 //myDataManager.testPrintVolume(myrank);
 			//myDataManager.accumulateGlobalVolume(d, 1, myrank);
@@ -174,29 +204,30 @@ int main(int argc, char** argv)
 			myRenderManager.setEmissionOff();
 
 			myRenderManager.initiateTransferFunction();
-			myRenderManager.setRenderingParameter(256, 256, 670.0, 670.0, 20.0, 100000.0, 670.0);
+			myRenderManager.setRenderingParameter(imgWidth, imgHeight, step, step, nearPlane, farPlane, step);
 			//myRenderManager.setRenderingParameter(11, 11, 10.0, 10.0, 20.0, 6000.0, 30.0);
 
 			//if (myrank == 1) {
 			Ray testRay;
 			//testRay.origin.setValue(-3000, -50000, -50000);
-			testRay.origin.setValue(0, 0, -50000);
+			testRay.origin.setValue(cameraPosX, cameraPosY, cameraPosZ);
 			//testRay.origin.setValue(0, 0, 0);
 			//testRay.dir.setValue(0.7, 0.7, 0.7);
-			testRay.dir.setValue(0, 0, 0.7);
+			testRay.dir.setValue(cameraDirX, cameraDirY, cameraDirZ);
 			//testRay.dir.setValue(0.6, 1, 1);
 			Vec3f cameraUp;
-			cameraUp.setValue(1, 0, 0);
+			cameraUp.setValue(cameraUpDirX, cameraUpDirY, cameraUpDirZ);
 			//cameraUp.setValue(1, 0, 0);
-			int level = 0;
 			myRenderManager.updateCamera(level, testRay, cameraUp);
 			myRenderManager.render();
-			myRenderManager.saveImage(myrank, level, "arbitraryRay");
 
+			string q(argv[20]);
+			myRenderManager.saveImage(myrank, level, q.c_str());
+			q.append("_comp");
 			CompositeManager myCompositeManager;
 			myCompositeManager.setImage( myRenderManager.getImage() );
 			myCompositeManager.composite(myrank, d);
-			myCompositeManager.saveImage(myrank, level, "arbitraryRay_composite");
+			myCompositeManager.saveImage(myrank, level, q.c_str());
 			//}
 			//myRenderManager.test(myrank);
 

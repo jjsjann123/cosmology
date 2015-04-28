@@ -108,16 +108,16 @@ void RenderManager::initiateTransferFunction()
 		_renderer.addTransferFunction(0, 0, 0, 0, 0);
 		_renderer.addTransferFunction(0.5, 0, 0.2, 0.2, 0.0);
 		_renderer.addTransferFunction(1, 0.05, 0.12, 0.02, 0.2);
-		_renderer.addTransferFunction(2, 0.3, 0.2, 0.5, 0.2);
-		_renderer.addTransferFunction(20, 0.7, 0, 0.6, 0.3);
-		_renderer.addTransferFunction(100, 1, 0.0, 0.0, 1);
+		_renderer.addTransferFunction(2, 0.0, 0.2, 0.5, 0.2);
+		_renderer.addTransferFunction(20, 0.0, 0.5, 0.6, 0.3);
+		_renderer.addTransferFunction(100, 1, 1, 1, 1);
 		_renderer.addTransferFunction(1000, 0.6, 0.2, 0.1, 0.3);
 		_renderer.addTransferFunction(10000, 1, 1, 1, 1);
 	} else {
 		_renderer.addTransferFunction(0, 0, 0, 0, 0);
 		_renderer.addTransferFunction(0.5, 0, 0.2, 0.2, 0.0);
-		_renderer.addTransferFunction(1, 0.5, 0.2, 0.2, 0.04);
-		_renderer.addTransferFunction(100, 1, 0.6, 0.6, 0.06);
+		_renderer.addTransferFunction(1, 0.5, 0.3, 0.3, 0.04);
+		_renderer.addTransferFunction(100, 1, 1, 1, 0.06);
 		_renderer.addTransferFunction(1000, 0.6, 0.2, 0.1, 0.3);
 		_renderer.addTransferFunction(10000, 1, 1, 1, 1);
 	}
@@ -139,3 +139,4 @@ ImageIO* RenderManager::getImage()
 {
 	return _renderer.getImage();
 }
+

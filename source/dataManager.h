@@ -36,7 +36,7 @@ namespace AJParallelRendering {
 		void setFileList(const char* fileList, int length);
 
 		void findLocalBoundary();
-		void syncGlobalBoundary(int d, int offset, int id);
+		float syncGlobalBoundary(int d, int offset, int id);	/// returns the maximum span
 
 		void particle2Volume(int levels, Vec3i grid);
 		void accumulateGlobalVolume(int d, int offset, int id);
